@@ -1,0 +1,57 @@
+:root {
+    color-scheme: light dark;
+}
+
+body {
+    color: light-dark(black, white);
+    background-color: light-dark(white, black);
+    font-family: sans-serif;
+}
+
+#container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#errorPopup {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    visibility: collapse;
+    background-color: light-dark(white, black);
+    padding: 8px;
+}
+
+#dropMessage {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#pakHeader {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+}
+
+#pakName {
+    font-weight: bold;
+}
+
+#pakStats {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#fileList {
+    position: fixed;
+    left: 10px;
+    top: 30px;
+    right: 10px;
+    bottom: 10px;
+    overflow: auto;
+}

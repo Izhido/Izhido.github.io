@@ -1,0 +1,20 @@
+:root {
+    color-scheme: light dark;
+}
+
+body {
+    color: light-dark(black, white);
+    background-color: light-dark(white, black);
+    font-family: sans-serif;
+}
+
+#contents {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 20px;
+}
+
+li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

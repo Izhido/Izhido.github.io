@@ -1,0 +1,66 @@
+:root {
+    color-scheme: light dark;
+}
+
+body {
+   color: light-dark(black, white);
+    background-color: light-dark(white, black);
+    font-family: sans-serif;
+}
+
+#canvas {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#errorPopup {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    visibility: collapse;
+    background-color: light-dark(white, black);
+    padding: 8px;
+}
+
+#dropMessage {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#timelineView {
+    visibility: hidden;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    height: 40px;
+}
+
+#play {
+    position: absolute;
+    width: 60px;
+}
+
+#skipPrevious {
+    position: absolute;
+    top: 20px;
+    width: 30px;
+}
+
+#skipNext {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 30px;
+}
+
+#skinSelect {
+    position: absolute;
+    top: 20px;
+    left: 68px;
+}

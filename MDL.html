@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MDL</title>
+    <link rel="stylesheet" href="styles/MDL.css">
+    <script src="scripts/MDL_main.js"></script>
+    <script src="scripts/MDL.js"></script>
+    <script src="scripts/MDLRenderer.js"></script>
+    <script src="scripts/Matrix.js"></script>
+    <script src="scripts/defaultPalette.js"></script>
+    <script src="scripts/defaultTimelines.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="canvas"></canvas>
+      <span id="dropMessage">Drop a .mdl file to view its contents.</span>
+      <div id="timelineView">
+        <button id="play">&#x23F5;</button>
+        <button id="skipPrevious">&#x23EE;</button>
+        <button id="skipNext">&#x23ED;</button>
+      </div>
+      <div id="errorPopup">
+        <button id="dismissPopup">&#x24E7;</button>
+        <span id="errorMessage"></span>
+      </div>
+    </div>
+  </body>
+</html>
