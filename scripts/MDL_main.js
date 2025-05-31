@@ -172,7 +172,7 @@ window.addEventListener("load", () => {
 	}
 
 	function onSkinSelect(event) {
-		const index = Number.parse(event.target.value)
+		const index = Number.parseInt(event.target.value)
 		mdlRenderer.skinIndex = index
 		mdlRenderer.skinSubindex = Math.min(mdlRenderer.skinSubindex, mdl.skins[mdlRenderer.skinIndex].numSkins - 1)
 		if (!playing) {
