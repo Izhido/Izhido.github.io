@@ -8,9 +8,16 @@ window.addEventListener("load", () => {
 		return;
 	}
 
+	const timelineCanvas = document.getElementById("timeline") 
+	const ctx = timelineCanvas.getContext("2d")
+
 	const mdl = new MDL()
 	
 	const mdlRenderer = new MDLRenderer()
+
+	const timelineRenderer = new TimelineRenderer()
+	timelineRenderer.leftBorder = 70;
+	timelineRenderer.rightBorder = 80;
 
 	let loadedName
 	let mdlName
@@ -20,11 +27,18 @@ window.addEventListener("load", () => {
 
 	let elapsedTime
 
+	function render() {
+		mdlRenderer.render(gl, mdl)
+		timelineRenderer.render(ctx, mdl, mdlRenderer, timeline)
+	}
+
 	function resizeCanvas() {
 		canvas.width = window.innerWidth
 		canvas.height = window.innerHeight
+		timelineCanvas.width = window.innerWidth - 20
+		timelineCanvas.height = 40
 		if (!playing) {
-			mdlRenderer.render(gl, mdl)
+			render()
 		}
 	}
 
@@ -49,7 +63,7 @@ window.addEventListener("load", () => {
 			mdlRenderer.rotationXZ += ((mousePreviousClientX - event.clientX) * 90 / 256)
 			mdlRenderer.rotationYZ += ((mousePreviousClientY - event.clientY) * 90 / 256)
 			if (!playing) {
-				mdlRenderer.render(gl, mdl)
+				render()
 			}
 			mousePreviousClientX = event.clientX
 			mousePreviousClientY = event.clientY
@@ -60,7 +74,7 @@ window.addEventListener("load", () => {
 		event.preventDefault()
 		mdlRenderer.zoomFactor = Math.max(0.01, mdlRenderer.zoomFactor + event.deltaY * 0.01)
 		if (!playing) {
-			mdlRenderer.render(gl, mdl)
+			render()
 		}
 	}
 
@@ -115,7 +129,7 @@ window.addEventListener("load", () => {
 					mdlRenderer.skinSubindex = subindex
 				}
 			}
-			mdlRenderer.render(gl, mdl)
+			render()
 			setTimeout(nextFrame, 100)
 		}
 	}
@@ -153,7 +167,7 @@ window.addEventListener("load", () => {
 			mdlRenderer.timelineFrame = timeline[timelineIndex].first
 			mdlRenderer.timelineSubframe = 0
 			if (!playing) {
-				mdlRenderer.render(gl, mdl)
+				render()
 			}
 			updateSkipAvailability()
 		}
@@ -165,7 +179,7 @@ window.addEventListener("load", () => {
 			mdlRenderer.timelineFrame = timeline[timelineIndex].first
 			mdlRenderer.timelineSubframe = 0
 			if (!playing) {
-				mdlRenderer.render(gl, mdl)
+				render()
 			}
 			updateSkipAvailability()
 		}
@@ -176,7 +190,7 @@ window.addEventListener("load", () => {
 		mdlRenderer.skinIndex = index
 		mdlRenderer.skinSubindex = Math.min(mdlRenderer.skinSubindex, mdl.skins[mdlRenderer.skinIndex].numSkins - 1)
 		if (!playing) {
-			mdlRenderer.render(gl, mdl)
+			render()
 		}
 	}
 
@@ -212,6 +226,25 @@ window.addEventListener("load", () => {
 
 		const dropMessage = document.getElementById("dropMessage")
         dropMessage.style.visibility = "collapse"
+
+        const existingMdlHeader = document.getElementById("mdlHeader")
+        existingMdlHeader?.remove()
+
+        const mdlHeader = document.createElement("div")
+        mdlHeader.setAttribute("id", "mdlHeader")
+
+        const mdlNameSpan = document.createElement("span")
+        mdlNameSpan.setAttribute("id", "mdlName")
+        mdlNameSpan.innerText = mdlName
+        mdlHeader.appendChild(mdlNameSpan)
+        
+        const mdlStats = document.createElement("span")
+        mdlStats.setAttribute("id", "mdlStats")
+        mdlStats.innerText = mdl.numFrames + " frames, " + mdl.numSkins + " skins."
+        mdlHeader.appendChild(mdlStats)
+
+        const container = document.getElementById("container")
+        container.appendChild(mdlHeader)
 
 		const timelineView = document.getElementById("timelineView")
 		timelineView.style.visibility = "visible"
@@ -251,7 +284,7 @@ window.addEventListener("load", () => {
 		}
 		timelineView.appendChild(skinSelect)
 
-		mdlRenderer.render(gl, mdl)
+		render()
 	}
 
 	function loadFile(file) {
@@ -295,10 +328,13 @@ window.addEventListener("load", () => {
 
 	mdlRenderer.setup(gl)
 	mdlRenderer.clearColor = { r: 1, g: 1, b: 1, a: 1 }
+	timelineRenderer.lineColor = "black"
+	timelineRenderer.frameColor = "gray"
 	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 		mdlRenderer.clearColor.r = 0
 		mdlRenderer.clearColor.g = 0
 		mdlRenderer.clearColor.b = 0
+		timelineRenderer.lineColor = "white"
 	}
 
 	window.addEventListener("resize", resizeCanvas)
