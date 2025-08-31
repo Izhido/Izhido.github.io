@@ -195,18 +195,18 @@ window.addEventListener("load", () => {
 	}
 
 	function showErrorPopup(message) {
-        const errorMessage = document.getElementById("errorMessage")
-        errorMessage.innerText = message
-        const errorPopup = document.getElementById("errorPopup")
-        errorPopup.style.visibility = "visible"
-    }
+		const errorMessage = document.getElementById("errorMessage")
+		errorMessage.innerText = message
+		const errorPopup = document.getElementById("errorPopup")
+		errorPopup.style.visibility = "visible"
+	}
 
-    function onDismissPopup() {
-        const errorMessage = document.getElementById("errorMessage")
-        errorMessage.innerText = null
-        const errorPopup = document.getElementById("errorPopup")
-        errorPopup.style.visibility = "collapse"
-    }
+	function onDismissPopup() {
+		const errorMessage = document.getElementById("errorMessage")
+		errorMessage.innerText = null
+		const errorPopup = document.getElementById("errorPopup")
+		errorPopup.style.visibility = "collapse"
+	}
 
 	function readFile(event) {
 		if (!event.target.result instanceof ArrayBuffer) {
@@ -214,37 +214,37 @@ window.addEventListener("load", () => {
 		}
 
 		const loaded = mdl.load(event.target.result)
-        if (!loaded) {
-            showErrorPopup("MDL load failed: " + mdl.errorMessage)
-            return
-        } else {
-            onDismissPopup()
-        }
+		if (!loaded) {
+			showErrorPopup("MDL load failed: " + mdl.errorMessage)
+			return
+		} else {
+			onDismissPopup()
+		}
 
 		mdlName = loadedName
 		loadedName = null
 
 		const dropMessage = document.getElementById("dropMessage")
-        dropMessage.style.visibility = "collapse"
+		dropMessage.style.visibility = "collapse"
 
-        const existingMdlHeader = document.getElementById("mdlHeader")
-        existingMdlHeader?.remove()
+		const existingMdlHeader = document.getElementById("mdlHeader")
+		existingMdlHeader?.remove()
 
-        const mdlHeader = document.createElement("div")
-        mdlHeader.setAttribute("id", "mdlHeader")
+		const mdlHeader = document.createElement("div")
+		mdlHeader.setAttribute("id", "mdlHeader")
 
-        const mdlNameSpan = document.createElement("span")
-        mdlNameSpan.setAttribute("id", "mdlName")
-        mdlNameSpan.innerText = mdlName
-        mdlHeader.appendChild(mdlNameSpan)
-        
-        const mdlStats = document.createElement("span")
-        mdlStats.setAttribute("id", "mdlStats")
-        mdlStats.innerText = mdl.numFrames + " frames, " + mdl.numSkins + " skins."
-        mdlHeader.appendChild(mdlStats)
+		const mdlNameSpan = document.createElement("span")
+		mdlNameSpan.setAttribute("id", "mdlName")
+		mdlNameSpan.innerText = mdlName
+		mdlHeader.appendChild(mdlNameSpan)
+		
+		const mdlStats = document.createElement("span")
+		mdlStats.setAttribute("id", "mdlStats")
+		mdlStats.innerText = mdl.numFrames + " frames, " + mdl.numSkins + " skins, " + event.target.result.byteLength.toString() + " bytes, CRC: " + mdl.crc.toString() + "."
+		mdlHeader.appendChild(mdlStats)
 
-        const container = document.getElementById("container")
-        container.appendChild(mdlHeader)
+		const container = document.getElementById("container")
+		container.appendChild(mdlHeader)
 
 		const timelineView = document.getElementById("timelineView")
 		timelineView.style.visibility = "visible"
@@ -271,11 +271,11 @@ window.addEventListener("load", () => {
 		updateSkipAvailability()
 
 		const existingSkinSelect = document.getElementById("skinSelect")
-        existingSkinSelect?.remove()
+		existingSkinSelect?.remove()
 
 		const skinSelect = document.createElement("select")
 		skinSelect.setAttribute("id", "skinSelect")
-        skinSelect.addEventListener("change", onSkinSelect)
+		skinSelect.addEventListener("change", onSkinSelect)
 		for (let i = 0; i < mdl.numSkins; i++) {
 			const skin = document.createElement("option")
 			skin.setAttribute("value", i.toString())
@@ -316,8 +316,8 @@ window.addEventListener("load", () => {
 		}
 	}
 
-    const dismissPopup = document.getElementById("dismissPopup")
-    dismissPopup.addEventListener("click", onDismissPopup)
+	const dismissPopup = document.getElementById("dismissPopup")
+	dismissPopup.addEventListener("click", onDismissPopup)
 
 	canvas.addEventListener("mousedown", onMouseDown)
 	canvas.addEventListener("mouseup", onMouseUp)

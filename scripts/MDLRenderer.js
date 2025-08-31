@@ -18,9 +18,9 @@ class MDLRenderer {
 	skinSampler;
 	paletteSampler;
 
-    clearColor;
+	clearColor;
 
-    rotationXZ;
+	rotationXZ;
 	rotationYZ;
 
 	zoomFactor;
@@ -37,90 +37,90 @@ class MDLRenderer {
 		this.zoomFactor = 64
 
 		const vertexSource = `
-            precision highp float;
+			precision highp float;
 
-            attribute vec3 vertexPosition;
-            attribute vec2 vertexTexCoords;
+			attribute vec3 vertexPosition;
+			attribute vec2 vertexTexCoords;
 
-            uniform mat4 modelView;
-            uniform mat4 projection;
-            uniform vec2 texSize;
+			uniform mat4 modelView;
+			uniform mat4 projection;
+			uniform vec2 texSize;
 
-            varying vec2 fragmentTexCoords;
-            varying vec2 fragmentTexSize;
+			varying vec2 fragmentTexCoords;
+			varying vec2 fragmentTexSize;
 
-            void main(void) 
-            {
-                gl_Position = projection * modelView * vec4(vertexPosition, 1);
-                fragmentTexCoords = vertexTexCoords;
-                fragmentTexSize = texSize;
-            }
-        `
-        const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-        gl.shaderSource(vertexShader, vertexSource)
-        gl.compileShader(vertexShader)
-        if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-            const compileError = gl.getShaderInfoLog(vertexShader)
-            const errorMessage = document.getElementById("errorMessage")
-            errorMessage.innerText = "Vertex shader compilation failed: " + compileError
-            return;
-        }
+			void main(void) 
+			{
+				gl_Position = projection * modelView * vec4(vertexPosition, 1);
+				fragmentTexCoords = vertexTexCoords;
+				fragmentTexSize = texSize;
+			}
+		`
+		const vertexShader = gl.createShader(gl.VERTEX_SHADER)
+		gl.shaderSource(vertexShader, vertexSource)
+		gl.compileShader(vertexShader)
+		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+			const compileError = gl.getShaderInfoLog(vertexShader)
+			const errorMessage = document.getElementById("errorMessage")
+			errorMessage.innerText = "Vertex shader compilation failed: " + compileError
+			return;
+		}
 
-        const fragmentSource = `
-            precision highp float;
+		const fragmentSource = `
+			precision highp float;
 
-            uniform sampler2D skinSampler;
-            uniform sampler2D paletteSampler;
+			uniform sampler2D skinSampler;
+			uniform sampler2D paletteSampler;
 
-            varying vec2 fragmentTexCoords;
-            varying vec2 fragmentTexSize;
+			varying vec2 fragmentTexCoords;
+			varying vec2 fragmentTexSize;
 
-            void main(void)
-            {
-                vec2 fragmentTexCoordsToSample = fragmentTexCoords / fragmentTexSize;
-                vec4 entry = texture2D(skinSampler, fragmentTexCoordsToSample);
-                gl_FragColor = texture2D(paletteSampler, vec2(entry.x, 0));
-            }
-        `
-        const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
-        gl.shaderSource(fragmentShader, fragmentSource)
-        gl.compileShader(fragmentShader)
-        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-            const compileError = gl.getShaderInfoLog(fragmentShader)
-            const errorMessage = document.getElementById("errorMessage")
-            errorMessage.innerText = "Fragment shader compilation failed: " + compileError
-            return;
-        }
+			void main(void)
+			{
+				vec2 fragmentTexCoordsToSample = fragmentTexCoords / fragmentTexSize;
+				vec4 entry = texture2D(skinSampler, fragmentTexCoordsToSample);
+				gl_FragColor = texture2D(paletteSampler, vec2(entry.x, 0));
+			}
+		`
+		const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
+		gl.shaderSource(fragmentShader, fragmentSource)
+		gl.compileShader(fragmentShader)
+		if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+			const compileError = gl.getShaderInfoLog(fragmentShader)
+			const errorMessage = document.getElementById("errorMessage")
+			errorMessage.innerText = "Fragment shader compilation failed: " + compileError
+			return;
+		}
 
-        this.program = gl.createProgram()
-        gl.attachShader(this.program, vertexShader)
-        gl.attachShader(this.program, fragmentShader)
-        gl.linkProgram(this.program)
-        gl.detachShader(this.program, vertexShader)
-        gl.detachShader(this.program, fragmentShader)
-        gl.deleteShader(vertexShader)
-        gl.deleteShader(fragmentShader)
-        if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-            const linkError = gl.getProgramInfoLog(this.program)
-            const errorMessage = document.getElementById("errorMessage")
-            errorMessage.innerText = "Shader linking failed: " + linkError
-            return;
-        }
+		this.program = gl.createProgram()
+		gl.attachShader(this.program, vertexShader)
+		gl.attachShader(this.program, fragmentShader)
+		gl.linkProgram(this.program)
+		gl.detachShader(this.program, vertexShader)
+		gl.detachShader(this.program, fragmentShader)
+		gl.deleteShader(vertexShader)
+		gl.deleteShader(fragmentShader)
+		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+			const linkError = gl.getProgramInfoLog(this.program)
+			const errorMessage = document.getElementById("errorMessage")
+			errorMessage.innerText = "Shader linking failed: " + linkError
+			return;
+		}
 
-        this.vertexPosition = gl.getAttribLocation(this.program, "vertexPosition")
-        this.vertexTexCoords = gl.getAttribLocation(this.program, "vertexTexCoords")
+		this.vertexPosition = gl.getAttribLocation(this.program, "vertexPosition")
+		this.vertexTexCoords = gl.getAttribLocation(this.program, "vertexTexCoords")
 
-        this.modelView = gl.getUniformLocation(this.program, "modelView")
-        this.projection = gl.getUniformLocation(this.program, "projection")
-        this.texSize = gl.getUniformLocation(this.program, "texSize")
+		this.modelView = gl.getUniformLocation(this.program, "modelView")
+		this.projection = gl.getUniformLocation(this.program, "projection")
+		this.texSize = gl.getUniformLocation(this.program, "texSize")
 
-        this.skinSampler = gl.getUniformLocation(this.program, "skinSampler")
-        this.paletteSampler = gl.getUniformLocation(this.program, "paletteSampler")
+		this.skinSampler = gl.getUniformLocation(this.program, "skinSampler")
+		this.paletteSampler = gl.getUniformLocation(this.program, "paletteSampler")
 
-        gl.enable(gl.DEPTH_TEST);
-    }
+		gl.enable(gl.DEPTH_TEST);
+	}
 
-    render(gl, mdl) {
+	render(gl, mdl) {
 		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 		gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1.0)
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
